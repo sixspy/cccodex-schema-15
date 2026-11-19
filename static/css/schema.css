@@ -57,3 +57,22 @@ button.ghost { background: transparent; }
 label { display:block; margin: 0.7rem 0; }
 input { width:100%; margin-top: 0.3rem; padding: 0.55rem 0.7rem; border-radius: 10px; border:1px solid var(--line); font: inherit; }
 .row { display:flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; }
+.small { font-size: 0.82rem; }
+.mono { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 0.82rem; }
+.line {
+  display:flex; gap: 0.55rem; flex-wrap: wrap; align-items: center;
+  padding: 0.45rem 0.6rem; border: 1px solid var(--line); border-radius: 10px;
+  background: #fffdf8;
+}
+.spacer { flex: 1 1 auto; }
+.grow { flex: 1 1 220px; }
+.row input { width: auto; margin-top: 0; }
+.chip.ok { background: var(--accent-soft); color: var(--accent); }
+.chip.bad { background: #f7ded8; color: var(--danger); }
+.chip.wait { background: #fdf0cf; color: #8a6a12; }
+.chip.warn { background: #f3e4d2; color: #8a5a26; }
+.card.reject { border-left: 4px solid var(--danger); }
+table.rows { width: 100%; border-collapse: collapse; margin: 0.5rem 0; font-size: 0.86rem; }
+table.rows th, table.rows td { text-align: left; padding: 0.3rem 0.45rem; border-bottom: 1px solid var(--line); }
+tr.missing td { background: #fbe9e5; color: var(--danger); }
+pre { white-space: pre-wrap; word-break: break-word; margin: 0; }

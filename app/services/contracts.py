@@ -1,5 +1,6 @@
 from app.db import get_db
 from app.services.errors import ServiceError
+from app.services.gate import issue_credential
 
 
 def list_contracts(db_path: str | None = None) -> list[dict]:
@@ -57,7 +58,7 @@ def run_breaking_check(contract_id: int, db_path: str | None = None) -> dict:
 
 
 def apply_contract(contract_id: int, db_path: str | None = None) -> dict:
-    with get_db(db_path) as conn:
+    with get_db(db_path, immediate=True) as conn:
         draft = conn.execute(
             "SELECT * FROM schema_contracts WHERE id=?", (contract_id,)
         ).fetchone()
@@ -84,6 +85,14 @@ def apply_contract(contract_id: int, db_path: str | None = None) -> dict:
             "ON CONFLICT(table_name) DO UPDATE SET live_version=excluded.live_version, "
             "registered_at=datetime('now')",
             (draft["table_name"], draft["version_no"]),
+        )
+        # 齐契凭证与换版同事务原子切换：入站校验立即按新凭证判定，
+        # 不会出现「契约已换、凭证还旧」的窗口。
+        issue_credential(
+            conn,
+            conn.execute(
+                "SELECT * FROM schema_contracts WHERE id=?", (contract_id,)
+            ).fetchone(),
         )
         conn.execute(
             "INSERT INTO apply_runs(contract_id, table_name, from_version, to_version, result) "
